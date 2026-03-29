@@ -4,7 +4,7 @@ function App() {
   const [question, setQuestion] = useState(null);
 
 
-  // 🔥 CONNECT BACKEND HERE
+
   useEffect(() => {
     fetch("http://127.0.0.1:8000/question")
       .then(res => res.json())

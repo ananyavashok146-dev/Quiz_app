@@ -4,14 +4,21 @@ function App() {
   const [question, setQuestion] = useState(null);
   const [score, setScore] = useState(0);
 
-  // ✅ LOAD QUESTION (CONNECT HERE)
+  // ✅ LOAD QUESTION FUNCTION (IMPORTANT)
   const loadQuestion = () => {
     fetch("http://127.0.0.1:8000/question")
       .then(res => res.json())
-      .then(data => setQuestion(data))
-      .catch(err => console.log("ERROR:", err));
+      .then(data => {
+        console.log("DATA:", data);
+        setQuestion(data);
+      })
+      .catch(err => {
+        console.log("ERROR:", err);
+        alert("Backend not connected!");
+      });
   };
 
+  // ✅ CALL ON FIRST LOAD
   useEffect(() => {
     loadQuestion();
   }, []);
@@ -24,11 +31,12 @@ function App() {
       .then(res => res.json())
       .then(data => {
         setScore(data.score);
-        loadQuestion();
+        loadQuestion();   // ✅ NOW WORKS
       })
       .catch(err => console.log("ERROR:", err));
   };
 
+  // ✅ LOADING SCREEN
   if (!question) return <h2>Loading...</h2>;
 
   return (
@@ -38,7 +46,16 @@ function App() {
       <h2>{question.q}</h2>
 
       {question.options.map((opt, i) => (
-        <button key={i} onClick={() => handleAnswer(opt)}>
+        <button
+          key={i}
+          onClick={() => handleAnswer(opt)}
+          style={{
+            display: "block",
+            margin: "10px auto",
+            padding: "10px 20px",
+            cursor: "pointer"
+          }}
+        >
           {opt}
         </button>
       ))}

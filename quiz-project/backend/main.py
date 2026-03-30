@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+
 from data import questions
 from quiz_engine import QuizEngine
 import uuid
@@ -194,6 +195,14 @@ def get_leaderboard():
 @app.get("/health")
 def health_check():
     return {"status": "ok", "version": "2.0"}
+
+
+@app.get("/question")
+def get_question():
+    """Get a random easy question."""
+    level_questions = questions["easy"]
+    question = random.choice(level_questions)
+    return _format_question(question)
 
 
 def _pick_question(session_id: str, level: str):
